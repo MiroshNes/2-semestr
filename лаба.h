@@ -1,18 +1,15 @@
 #pragma once
 
-#define abstract = 0
-
-
 typedef enum ProcessType {
 	ptMain, ptSingle, ptMaster, ptSignaller, ptWorker
 } CProcessType;
 
 class CApplication;
 class CProcessSingle;
-
+//--------------------------------------------------------------------------------------------------------------
 
 extern CApplication *Application;
-
+//--------------------------------------------------------------------------------------------------------------
 
 class CCustomApplication {
 private:
@@ -31,7 +28,7 @@ public:
 		m_argv = (char **)argv;
 	};
 
-	~CCustomApplication() = default;
+	~CCustomApplication() {};
 
 	int ExitCode() { return m_exitcode; };
 	void ExitCode(int Status) { m_exitcode = Status; };
@@ -39,7 +36,7 @@ public:
 	int argc() { return m_argc; };
 
 }; // class CCustomApplication
-
+//--------------------------------------------------------------------------------------------------------------
 
 // Задание № 1
 class CCustomProcess {
@@ -62,11 +59,16 @@ protected:
 public:
 
 	// Задание № 2
-	CCustomProcess() : CCustomProcess(ptMain, nullptr) {
+	CCustomProcess() : m_Type(ptMain), m_pParent(nullptr) {
 	};
 
 	// Задание № 2
-	explicit CCustomProcess(CProcessType AType) : CCustomProcess(AType, nullptr) {
+	CCustomProcess(const CCustomProcess& Value) : m_Type(ptMain), m_pParent(nullptr) {
+		Assign((CCustomProcess *) &Value);
+	};
+
+	// Задание № 2
+	explicit CCustomProcess(CProcessType AType) : m_Type(AType), m_pParent(nullptr) {
 	};
 
 	// Задание № 2
@@ -76,11 +78,11 @@ public:
 	};
 
 	// Задание № 2
-	~CCustomProcess() = default;
+	~CCustomProcess() {};
 
 	// Задание № 1
 	// Задание № 9
-	virtual void Run() abstract;
+	virtual void Run() = 0;
 
 	// Задание № 9
 	virtual void Assign(CCustomProcess *AProcess) {
@@ -100,7 +102,7 @@ public:
 	void Status(int Value) { SetStatus(Value); };
 
 }; // class CCustomProcess
-
+//--------------------------------------------------------------------------------------------------------------
 
 // Задание № 8
 class CApplicationProcess : public CCustomProcess {
@@ -120,7 +122,7 @@ public:
 			CCustomProcess(AType, AParent) {
 		};
 
-		~CProcessSingle() = default;
+		~CProcessSingle() {};
 
 		// Задание № 7
 		void Run() override {
@@ -128,13 +130,13 @@ public:
 		};
 
 	};
-	
+	//--------------------------------------------------------------------------------------------------------------
 
 	explicit CApplicationProcess(CCustomProcess* AParent, CApplication *AApplication, CProcessType AType) : CCustomProcess(),
 		m_pApplication(AApplication) {
 	};
 
-	~CApplicationProcess() = default;
+	~CApplicationProcess() {};
 
 	// Задание № 3
 	static class CCustomProcess *Create(CApplication *AApplication, CProcessType AType);
@@ -147,7 +149,7 @@ public:
 	CApplication *Application() { return m_pApplication; };
 
 }; // class CApplicationProcess
-
+//--------------------------------------------------------------------------------------------------------------
 
 class CProcessManager {
 public:
@@ -162,7 +164,7 @@ public:
 	};
 
 }; // class CProcessManager
-
+//--------------------------------------------------------------------------------------------------------------
 
 // Задание № 8
 class CApplication : public CProcessManager, public CCustomApplication, public CApplicationProcess {
@@ -196,7 +198,7 @@ public:
 
 	void Destroy() { delete this; };
 
-	~CApplication() = default;
+	~CApplication() {};
 
 	// Задание № 7
 	void Run() override {
@@ -207,5 +209,5 @@ public:
 	void ProcessType(CProcessType Value) { SetProcessType(Value); };
 
 }; // class CApplication
-	 
+	 //--------------------------------------------------------------------------------------------------------------
 

@@ -1,4 +1,8 @@
-#include "stdafx.h"
+#include <Windows.h>
+#include <stdio.h>
+#include <tchar.h>
+
+#include "лаба.h"
 
 class CCustomProcess *CApplicationProcess::Create(CApplication *AApplication, CProcessType AType) {
 	return new CProcessSingle(AApplication, AType);
@@ -15,3 +19,4 @@ int main(int argc, char *argv[])
 
 	exit(exitcode);
 }
+
